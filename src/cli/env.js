@@ -1,5 +1,9 @@
+import {env, stdout} from "node:process";
+
 const parseEnv = () => {
-    // Write your code here 
+    Object.keys(env).forEach((item) => {
+        stdout.write(`RSS_${item}=${env[item]}; `)
+    })
 };
 
 parseEnv();
