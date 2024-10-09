@@ -1,5 +1,7 @@
 import * as os from "node:os";
 import {Worker, isMainThread} from "node:worker_threads";
+import path from "path";
+import {fileURLToPath} from "url";
 
 const performCalculations = async () => {
     if (isMainThread) {
@@ -23,8 +25,10 @@ const performCalculations = async () => {
 await performCalculations();
 
 function create(threadNumber) {
+    const dirPath = path.dirname(fileURLToPath(import.meta.url)),
+        workerPath = path.join(dirPath, 'worker.js')
     return new Promise((resolve, reject) => {
-        const worker = new Worker('./worker.js', {workerData: threadNumber})
+        const worker = new Worker(workerPath, {workerData: threadNumber})
         worker.on('message', (result) => {
             resolve({
                 status: 'resolved',
